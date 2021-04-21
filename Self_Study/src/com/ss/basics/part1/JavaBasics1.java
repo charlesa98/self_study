@@ -26,7 +26,7 @@ public class JavaBasics1 {
 			}
 			System.out.println();
 		}
-		System.out.println(".........");
+		System.out.println("----------");
 	}
 	
 	//this will print the half pyramid from largest to smallest
@@ -35,7 +35,7 @@ public class JavaBasics1 {
 	{
 			
 			System.out.println("2)");
-			System.out.println("..........");
+			System.out.println("----------");
 			//control for the amount printed
 			for(int i =n; i>=0; i--) {
 				//prints *
@@ -68,7 +68,7 @@ public class JavaBasics1 {
 			}
 			System.out.println();
 		}
-		System.out.println("...........");
+		System.out.println("-----------");
 	}
 	
 	//this will print the full pyramid upside down
@@ -76,7 +76,7 @@ public class JavaBasics1 {
 	public static void printPyramidUpsideDown(int n)
 	{
 		System.out.println("4)");
-		System.out.println("............");	
+		System.out.println("-----------");	
 		//main control for building it
 		for(int i=n-1; i>=0; i--)
 		{
