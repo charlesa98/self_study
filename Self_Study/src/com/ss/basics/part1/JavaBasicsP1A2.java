@@ -49,6 +49,7 @@ public class JavaBasicsP1A2 {
 		}
 		System.out.println("Sorry you have lost. The number was "+random);
 		System.exit(0);
+		input.close();
 	}
 
 }
