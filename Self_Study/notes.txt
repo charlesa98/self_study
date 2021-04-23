@@ -1,0 +1,3 @@
+https://www.youtube.com/watch?v=8aGhZQkoFbQ&ab_channel=JSConf   for nodejs and event loops
+
+https://www.youtube.com/watch?v=ztspvPYybIY&ab_channel=stri8ted
