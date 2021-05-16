@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ss.lib.entity.Book;
 import com.ss.lib.entity.BookCopies;
 import com.ss.lib.entity.LibraryBranch;
 
@@ -32,16 +33,19 @@ public class BookCopiesDAO extends BaseDAO<BookCopies>{
 		save("DELETE FROM tbl_book_copies where bookId = ? AND branchId = ?", new Object[] {copy.getCopyBookID().getBookID(), copy.getCopyBranchID().getBranchID()});
 	}
 	
+	public void deleteBookCopiesBookID(BookCopies copy) throws ClassNotFoundException, SQLException
+	{
+		save("DELETE FROM tbl_book_copies where bookId = ?", new Object[] {copy.getCopyBookID().getBookID()});
+	}
+	
 	public List<BookCopies> getAllBookCopies() throws ClassNotFoundException, SQLException
 	{
 		return read("select * from tbl_book_copies", null);
-		
 	}
 	
-	public List<BookCopies> getAllBookCopiesBranch(BookCopies lb) throws ClassNotFoundException, SQLException
+	public List<BookCopies> getNumBookCopies(Book b, LibraryBranch lb) throws ClassNotFoundException, SQLException
 	{
-		return read("select bookId from tbl_book_copies where noOfCopies >0 AND branchId = ?", new Object[] {lb.getCopyBranchID().getBranchID()});
-		
+		return read("Select noOfCopies from tbl_book_copies where branchId = ? and bookId = ?", new Object[] {lb.getBranchID(), b.getBookID()});
 	}
 	
 	@Override

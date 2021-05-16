@@ -4,8 +4,9 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import com.ss.lib.entity.Author;
+import com.ss.lib.menus.Admin1;
 /*
- * Main -> Admin1 -> AdminAuthor
+ * Main -> Admin1 -> AdminBookAuthor -> AdminAuthor 
  */
 public class AdminAuthor {
 	private AdminService service = new AdminService();
@@ -13,7 +14,7 @@ public class AdminAuthor {
 	
 	private void header1()
 	{
-		System.out.println("\nADD/UPDATE/DELETE/READ AUTHORS");
+		System.out.println("\nADD/UPDATE/DELETE/READ AUTHORS or QUIT to return");
 	}
 	
 	public void performNext() throws SQLException 
@@ -42,6 +43,8 @@ public class AdminAuthor {
 		else if(choice.equalsIgnoreCase("quit") || choice.equalsIgnoreCase("q"))
 		{
 			System.out.println("Quitting");
+			Admin1 a1 = new Admin1();
+			a1.run();
 		}
 		else
 		{
@@ -70,7 +73,9 @@ public class AdminAuthor {
 		input.close();
 		}catch(NumberFormatException e)
 		{
-			System.out.println("You have entered a non number");
+			System.out.println("You have entered a non number and will be returned to the previous menu");
+			Admin1 a1 = new Admin1();
+			a1.run();
 		}
 	}
 	
@@ -78,6 +83,9 @@ public class AdminAuthor {
 	{
 		try {
 			Scanner input = new Scanner(System.in);
+			
+			service.showAllAuthors();
+			
 			System.out.println("\nUPDATE Authors");
 			System.out.println("Enter the Author ID");
 			int id = Integer.parseInt(input.nextLine());
@@ -86,15 +94,27 @@ public class AdminAuthor {
 			String name = input.nextLine();
 			
 			a.setAuthorID(id);
-			a.setAuthorName(name);
 			
-			service.updateAuthor(a);
+			
+			if(name.isEmpty() == false)
+			{
+				a.setAuthorName(name);
+				service.updateAuthor(a);
+			}
+			else
+			{
+				System.out.println("You did not make any changes. Returning");
+				Admin1 a1 = new Admin1();
+				a1.run();
+			}
 			
 			input.close();
 		}
 		catch(NumberFormatException e)
 		{
-			System.out.println("You have entered a non number");
+			System.out.println("You have entered a non number and will be returned to the previous menu");
+			Admin1 a1 = new Admin1();
+			a1.run();
 		}
 	}
 	
@@ -102,6 +122,8 @@ public class AdminAuthor {
 	{
 		try {
 			Scanner input = new Scanner(System.in);
+			
+			service.showAllAuthors();
 			
 			System.out.println("DELETE Author");
 			System.out.println("Author ID to delete?");
@@ -112,7 +134,9 @@ public class AdminAuthor {
 		}
 		catch(NumberFormatException e)
 		{
-			System.out.println("You have entered a non number");
+			System.out.println("You have entered a non number and will be returned to the previous menu");
+			Admin1 a1 = new Admin1();
+			a1.run();
 		}
 	}
 	

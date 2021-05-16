@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import com.ss.lib.entity.LibraryBranch;
+import com.ss.lib.menus.Admin1;
+import com.ss.lib.menus.Main;
 /*
  * Main -> Admin1 -> AdminLibraryBranches
  */
@@ -13,7 +15,7 @@ public class AdminLibraryBranches{
 	
 	private void header1()
 	{
-		System.out.println("\nADD/UPDATE/DELETE/READ LIBRARY BRANCHES");
+		System.out.println("\nADD/UPDATE/DELETE/READ LIBRARY BRANCHES or QUIT to return");
 	}
 	
 	public void performNext() throws SQLException 
@@ -42,6 +44,8 @@ public class AdminLibraryBranches{
 		else if(choice.equalsIgnoreCase("quit") || choice.equalsIgnoreCase("q"))
 		{
 			System.out.println("Quitting");
+			Admin1 a1 = new Admin1();
+			a1.run();
 		}
 		else
 		{
@@ -74,7 +78,9 @@ public class AdminLibraryBranches{
 		input.close();
 		}catch(NumberFormatException e)
 		{
-			System.out.println("You have entered a non number");
+			System.out.println("You have entered a non number and will be returned to the previous menu");
+			Admin1 a1 = new Admin1();
+			a1.run();
 		}
 	}
 	
@@ -82,6 +88,9 @@ public class AdminLibraryBranches{
 	{
 		try {
 			Scanner input = new Scanner(System.in);
+			
+			service.showAllLibraryBranches();
+			
 			System.out.println("\nUPDATE LibraryBranchs");
 			System.out.println("Enter the LibraryBranch ID");
 			int id = Integer.parseInt(input.nextLine());
@@ -104,12 +113,21 @@ public class AdminLibraryBranches{
 				lb.setBranchName(name);
 				service.updateBranchName(lb);
 			}
+			if(name.isEmpty() == true && addr.isEmpty() == true)
+			{
+				System.out.println("Nothing was changed. Returning to previous menu");
+				Admin1 a1 = new Admin1();
+				a1.run();
+			}
 			
 			input.close();
+			Main.run();
 		}
 		catch(NumberFormatException e)
 		{
-			System.out.println("You have entered a non number");
+			System.out.println("You have entered a non number and will be returned to the previous menu");
+			Admin1 a1 = new Admin1();
+			a1.run();
 		}
 	}
 	
@@ -117,6 +135,8 @@ public class AdminLibraryBranches{
 	{
 		try {
 			Scanner input = new Scanner(System.in);
+			
+			service.showAllLibraryBranches();
 			
 			System.out.println("DELETE LibraryBranch");
 			System.out.println("LibraryBranch ID to delete?");
@@ -127,7 +147,9 @@ public class AdminLibraryBranches{
 		}
 		catch(NumberFormatException e)
 		{
-			System.out.println("You have entered a non number");
+			System.out.println("You have entered a non number and will be returned to the previous menu");
+			Admin1 a1 = new Admin1();
+			a1.run();
 		}
 	}
 	

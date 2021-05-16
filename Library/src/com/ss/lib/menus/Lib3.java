@@ -9,6 +9,10 @@ import com.ss.lib.entity.BookCopies;
 import com.ss.lib.entity.LibraryBranch;
 import com.ss.lib.service.LibrarianService;
 
+/*
+ * Main -> Lib1 -> Lib2 -> Lib3
+ */
+
 public class Lib3 {
 	private LibrarianService service = new LibrarianService();
 	private void header()
@@ -96,15 +100,21 @@ public class Lib3 {
 			lb.setBranchName(name);
 			service.updateBranchName(lb);
 		}
+		if(name.isEmpty() == true && addr.isEmpty() == true)
+		{
+			System.out.println("Nothing is being changed. Returning to previous menu\n");
+			Lib2 l2 = new Lib2();
+			l2.run();
+		}
 		input.close();
 	}
 	
 	public void updateBranchBook(List<Book> bookList, LibraryBranch lb) throws SQLException
 	{
 		System.out.println("\nWhich Book would you like to add?");
-		Scanner input = new Scanner(System.in);
+		Scanner input2 = new Scanner(System.in);
 		
-		int choice = Integer.parseInt(input.nextLine());
+		int choice = Integer.parseInt(input2.nextLine());
 		Boolean quit = false;
 		
 		while(choice-1 <= bookList.size() && choice-1 >= 0 && quit != true)
@@ -121,31 +131,36 @@ public class Lib3 {
 				//create an array to convert the list so we can get the index (choice+1) of the book we want
 				Book[] bookArray = new Book[bookList.size()];
 				bookArray = bookList.toArray(bookArray);
+								
+				int branchNum = lb.getBranchID();
+				int bookNum = bookArray[choice].getBookID();
+				
+				List<BookCopies> copiesList = service.showCopies(branchNum, bookNum);
+				
+				BookCopies[] copiesArray = new BookCopies[copiesList.size()];
+				copiesArray = copiesList.toArray(copiesArray);
 				
 				BookCopies bc = new BookCopies();
-
-				bc.setCopyBookID(bookArray[choice]);
-				bc.setCopyBranchID(lb);
+				
+				bc.setCopyBookID(copiesArray[0].getCopyBookID());
+				bc.setCopyBranchID(copiesArray[0].getCopyBranchID());
+				bc.setNumCopies(copiesArray[0].getNumCopies());
+				
 				
 				System.out.println("amount of copies of book "+bc.getCopyBookID().getBookID()+" at branch "+bc.getCopyBranchID().getBranchID() +
-						" is ");
-				
-				
-				
+						" is "+bc.getNumCopies());
 				
 				
 				System.out.println("What is the new amount of copies of this book at your location?");
-				int amount = Integer.parseInt(input.nextLine());
+				int amount = Integer.parseInt(input2.nextLine());
 				
 				
 				bc.setNumCopies(amount);
+				service.updateCopies(bc, lb);
 				
-				service.updateCopies(bc);
-				
-				//System.out.print("Existing number of books at your branch: ");
 				quit = true;
 			}
 		}
-		input.close();
+		input2.close();
 	}
 }

@@ -1,14 +1,15 @@
 package com.ss.lib.entity;
 
 public class Borrower {
-	@Override
-	public String toString() {
-		return "cardNum= " + cardNum + ", bName= " + bName + ", bAddress= " + bAddress + ", bPhone= " + bPhone;
-	}
 	private Integer cardNum;
 	private String bName;
 	private String bAddress;
 	private String bPhone;
+	
+	@Override
+	public String toString() {
+		return "cardNum= " + cardNum + ", bName= " + bName + ", bAddress= " + bAddress + ", bPhone= " + bPhone;
+	}
 	
 	public Integer getCardNum() {
 		return cardNum;

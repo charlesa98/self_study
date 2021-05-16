@@ -43,9 +43,7 @@ public class Main {
 		{
 			case 1:
 				//open the librarian menu 1
-				System.out.println("\nOpening librarian 1\n");
 
-				//opens the first admin menu
 				Lib1 lib1 = new Lib1();
 				lib1.run();
 				
@@ -53,7 +51,6 @@ public class Main {
 				
 			case 2:
 				//open the Admin menu 1
-				System.out.println("\nOpening admin 1\n");
 
 				//opens the first admin menu
 				Admin1 ad1 = new Admin1();
@@ -63,7 +60,6 @@ public class Main {
 				
 			case 3:
 				//open traveler menu 1
-				System.out.println("Opening borrower 1\n");
 				Bow1 bow1 = new Bow1();
 				bow1.run();
 

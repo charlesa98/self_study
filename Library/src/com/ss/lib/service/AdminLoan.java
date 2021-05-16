@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import com.ss.lib.entity.BookLoans;
+import com.ss.lib.menus.Admin1;
 
 public class AdminLoan {
 
@@ -12,7 +13,7 @@ public class AdminLoan {
 	
 	private void header1()
 	{
-		System.out.println("\nADD/UPDATE/DELETE/READ BOOK LOANS");
+		System.out.println("\nADD/UPDATE/DELETE/READ BOOK LOANS or QUIT to return");
 	}
 	
 	public void performNext() throws SQLException 
@@ -41,6 +42,8 @@ public class AdminLoan {
 		else if(choice.equalsIgnoreCase("quit") || choice.equalsIgnoreCase("q"))
 		{
 			System.out.println("Quitting");
+			Admin1 a1 = new Admin1();
+			a1.run();
 		}
 		else
 		{
@@ -64,10 +67,10 @@ public class AdminLoan {
 		System.out.println("Card Number of the Borrower?");
 		int borwid = Integer.parseInt(input.nextLine());
 		
-		System.out.println("Check out date?");
+		System.out.println("Check out date? yyyy-mm-dd");
 		String coDate = input.nextLine();
 		
-		System.out.println("Due date?");
+		System.out.println("Due date? yyyy-mm-dd");
 		String dueDate = input.nextLine();
 
 		bl.getLoanBookID().setBookID(bid);
@@ -81,7 +84,9 @@ public class AdminLoan {
 		input.close();
 		}catch(NumberFormatException e)
 		{
-			System.out.println("You have entered a non number");
+			System.out.println("You have entered a non number and will be returned to the previous menu");
+			Admin1 a1 = new Admin1();
+			a1.run();
 		}
 	}
 	
@@ -89,6 +94,9 @@ public class AdminLoan {
 	{
 		try {
 			Scanner input = new Scanner(System.in);
+			
+			service.showAllBookLoans();
+			
 			System.out.println("\nUPDATE BookLoans");
 			System.out.println("ID of Book?");
 			int bid = Integer.parseInt(input.nextLine());
@@ -117,7 +125,9 @@ public class AdminLoan {
 		}
 		catch(NumberFormatException e)
 		{
-			System.out.println("You have entered a non number");
+			System.out.println("You have entered a non number and will be returned to the previous menu");
+			Admin1 a1 = new Admin1();
+			a1.run();
 		}
 	}
 	
@@ -125,6 +135,8 @@ public class AdminLoan {
 	{
 		try {
 			Scanner input = new Scanner(System.in);
+			
+			service.showAllBookLoans();
 			
 			System.out.println("DELETE BookLoan");
 			System.out.println("ID of Book?");
@@ -145,7 +157,9 @@ public class AdminLoan {
 		}
 		catch(NumberFormatException e)
 		{
-			System.out.println("You have entered a non number");
+			System.out.println("You have entered a non number and will be returned to the previous menu");
+			Admin1 a1 = new Admin1();
+			a1.run();
 		}
 	}
 	

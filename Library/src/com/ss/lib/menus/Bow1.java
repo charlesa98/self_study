@@ -26,31 +26,36 @@ public class Bow1 {
 	//this will check is the card number is valid or not first
 	private int getCard() throws SQLException
 	{
+		@SuppressWarnings("resource")
 		Scanner input = new Scanner(System.in);
 		int number = -1;
-		
-		number = Integer.parseInt(input.nextLine());
-		
-		Connection conn = null;
-		try {
-			conn = connUtil.getConnection();
-			Statement stmt = conn.createStatement();
-			String sql = "select cardNo from tbl_borrower where cardNo = '"+number+"'";
-			
-			ResultSet rs = stmt.executeQuery(sql);
-			
-			if(rs.next())
-			{
-				System.out.println("That is a valid number");
-				return number;
-			}
-			else
-			{
-				System.out.println("That is not a valid number\n");
-			}
-		}catch(Exception e)
+		Boolean quit = false;
+		while(quit != true)
 		{
-			System.out.println("Something went wrong with entering the card");
+			number = Integer.parseInt(input.nextLine());
+			
+			Connection conn = null;
+			try {
+				conn = connUtil.getConnection();
+				Statement stmt = conn.createStatement();
+				String sql = "select cardNo from tbl_borrower where cardNo = '"+number+"'";
+				
+				ResultSet rs = stmt.executeQuery(sql);
+				
+				if(rs.next())
+				{
+					System.out.println("That is a valid number");
+					quit = true;
+					return number;
+				}
+				else
+				{
+					System.out.println("That is not a valid number. Enter again\n");
+				}
+			}catch(Exception e)
+			{
+				System.out.println("Something went wrong with entering the card");
+			}
 		}
 		//input.close();			//this causes issues
 		return number;
@@ -90,23 +95,22 @@ public class Bow1 {
 		{
 			case 1:
 				//check out a book
-				Bow2O1 b2 = new Bow2O1();
-				b2.run(cardNum);
+				Bow2O1 b2o1 = new Bow2O1();
+				b2o1.run(cardNum);
 				
 				break;
 				
 			case 2:
 				//return a book
-				//Bow2O2 b2 = new Bow2O2();
-				//b2.run();
+				Return ret = new Return();
+				ret.run(cardNum);
 				
 				break;
 				
 			case 3:
 				//goes back to the main menu
 				System.out.println("Going back previous menu\n");
-				Bow1 bow1 = new Bow1();
-				bow1.run();
+				Main.run();
 				break;
 				
 			default:

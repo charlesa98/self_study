@@ -1,15 +1,16 @@
 package com.ss.lib.entity;
 
 public class Publisher {
+	private Integer publisherID;
+	private String publisherName;
+	private String publisherAddress;
+	private String publisherPhone;
+	
 	@Override
 	public String toString() {
 		return "publisherID= " + publisherID + ", publisherName= " + publisherName + ", publisherAddress= "
 				+ publisherAddress + ", publisherPhone= " + publisherPhone;
 	}
-	private Integer publisherID;
-	private String publisherName;
-	private String publisherAddress;
-	private String publisherPhone;
 	
 	public Integer getPublisherID() {
 		return publisherID;

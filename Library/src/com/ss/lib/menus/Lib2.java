@@ -7,6 +7,10 @@ import java.util.Scanner;
 import com.ss.lib.entity.LibraryBranch;
 import com.ss.lib.service.LibrarianService;
 
+/*
+ * Main -> Lib1 -> Lib2
+ */
+
 public class Lib2 {
 	LibrarianService ls = new LibrarianService();
 	

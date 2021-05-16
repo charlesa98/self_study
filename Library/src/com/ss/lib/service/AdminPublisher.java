@@ -4,6 +4,12 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import com.ss.lib.entity.Publisher;
+import com.ss.lib.menus.Admin1;
+import com.ss.lib.menus.Main;
+
+/*
+ * Main -> Admin1 -> AdminPublisher
+ */
 
 public class AdminPublisher {
 	private AdminService service = new AdminService();
@@ -11,7 +17,7 @@ public class AdminPublisher {
 	
 	private void header1()
 	{
-		System.out.println("\nADD/UPDATE/DELETE/READ PUBLISHERS");
+		System.out.println("\nADD/UPDATE/DELETE/READ PUBLISHERS or QUIT to return");
 	}
 	
 	public void performNext() throws SQLException 
@@ -40,6 +46,8 @@ public class AdminPublisher {
 		else if(choice.equalsIgnoreCase("quit") || choice.equalsIgnoreCase("q"))
 		{
 			System.out.println("Quitting");
+			Admin1 a1 = new Admin1();
+			a1.run();
 		}
 		else
 		{
@@ -76,7 +84,9 @@ public class AdminPublisher {
 		input.close();
 		}catch(NumberFormatException e)
 		{
-			System.out.println("You have entered a non number");
+			System.out.println("You have entered a non number and will be returned to the previous menu");
+			Admin1 a1 = new Admin1();
+			a1.run();
 		}
 	}
 	
@@ -84,6 +94,9 @@ public class AdminPublisher {
 	{
 		try {
 			Scanner input = new Scanner(System.in);
+			
+			service.showAllPublishers();
+			
 			System.out.println("\nUPDATE Publishers");
 			System.out.println("Enter the Publisher ID");
 			int id = Integer.parseInt(input.nextLine());
@@ -97,18 +110,36 @@ public class AdminPublisher {
 			System.out.println("Phone number of Publisher?");
 			String phone = input.nextLine();
 			
-			p.setPublisherID(id);
-			p.setPublisherName(name);
-			p.setPublisherAddress(addr);
-			p.setPublisherPhone(phone);
-			
-			service.updatePublisher(p);
-			
+			p.setPublisherID(id);		
+			if(name.isEmpty() == false)
+			{	
+				p.setPublisherName(name);
+				service.updatePublisherName(p);
+			}
+			if(addr.isEmpty() == false)
+			{
+				p.setPublisherAddress(addr);
+				service.updatePublisherAddress(p);
+			}
+			if(phone.isEmpty() == false)
+			{
+				p.setPublisherPhone(phone);
+				service.updatePublisherPhone(p);
+			}	
+			if(name.isEmpty() == true && addr.isEmpty() == true && phone.isEmpty() == true)
+			{
+				System.out.println("Nothing was changed. Returning to previous menu");
+				Admin1 a1 = new Admin1();
+				a1.run();
+			}
 			input.close();
+			Main.run();
 		}
 		catch(NumberFormatException e)
 		{
-			System.out.println("You have entered a non number");
+			System.out.println("You have entered a non number and will be returned to the previous menu");
+			Admin1 a1 = new Admin1();
+			a1.run();
 		}
 	}
 	
@@ -116,6 +147,8 @@ public class AdminPublisher {
 	{
 		try {
 			Scanner input = new Scanner(System.in);
+			
+			service.showAllPublishers();
 			
 			System.out.println("DELETE Publisher");
 			System.out.println("Publisher ID to delete?");
@@ -126,7 +159,9 @@ public class AdminPublisher {
 		}
 		catch(NumberFormatException e)
 		{
-			System.out.println("You have entered a non number");
+			System.out.println("You have entered a non number and will be returned to the previous menu");
+			Admin1 a1 = new Admin1();
+			a1.run();
 		}
 	}
 	

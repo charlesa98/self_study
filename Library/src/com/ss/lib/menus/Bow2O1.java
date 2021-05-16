@@ -18,7 +18,7 @@ public class Bow2O1 {
 	public void run(int cardNum) throws SQLException
 	{
 		try {
-			bs.readLibraryBranchNames(cardNum);
+			bs.readLibraryBranchNamesCheckOut(cardNum);
 		}
 		catch (Exception e)
 		{
@@ -57,8 +57,8 @@ public class Bow2O1 {
 				quit = true;
 				
 				System.out.println("You have entered branch "+branch.getBranchID()+" "+branch.getBranchName());
-				Bow2O2P2 b2o2 = new Bow2O2P2();
-				b2o2.run(branch, cardNum);
+				CheckOut cout = new CheckOut();
+				cout.run(branch, cardNum);
 			}
 		}
 		input.close();

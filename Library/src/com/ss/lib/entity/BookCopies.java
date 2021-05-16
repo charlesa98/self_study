@@ -7,7 +7,7 @@ public class BookCopies {
 	
 	@Override
 	public String toString() {
-		return "copyBookID= " + copyBookID + ", copyBranchID= " + copyBranchID + ", numCopies= " + numCopies;
+		return "copyBookID= " + copyBookID.getBookID() + ", copyBranchID= " + copyBranchID.getBranchID() + ", numCopies= " + numCopies;
 	}
 	
 	public Book getCopyBookID() {

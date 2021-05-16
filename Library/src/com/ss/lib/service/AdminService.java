@@ -78,8 +78,12 @@ public class AdminService {
 			Author temp = new Author();
 			temp.setAuthorID(id);
 			AuthorDAO adao = new AuthorDAO(conn);
-
 			
+			Book bookTemp = new Book();
+			bookTemp.getBookAuthorID().setAuthorID(id); 
+			BookDAO bdao = new BookDAO(conn);
+
+			bdao.deleteBookAuthor(bookTemp); 		//need to delete the book with the deleted author
 			adao.deleteAuthor(temp);			
 			
 			System.out.println("Deleted");
@@ -123,6 +127,31 @@ public class AdminService {
 		}
 	}
 	
+	public void showAllAuthors() throws SQLException
+	{
+		Connection conn = null;
+		try {
+			conn = connUtil.getConnection();
+			AuthorDAO adao = new AuthorDAO(conn);
+			
+			
+			List<Author> aList = adao.getAllAuthors();
+			for(Author a: aList)
+			{
+				System.out.println(a.toString());
+			}
+		}catch (Exception e)
+		{
+			e.printStackTrace();	
+			conn.rollback();				//if it fails, roll back
+		}
+		finally
+		{
+			conn.close();					//close connection
+			System.out.println("\n");
+		}
+	}
+	
 	//---------------------------------BOOKS------------------------------------------------------
 	public void addNewBook(Book b) throws SQLException 
 	{
@@ -159,7 +188,7 @@ public class AdminService {
 		try {
 			conn = connUtil.getConnection();
 			Book temp = new Book();
-			temp.setTitle(b.getTitle());
+			//temp.setTitle(b.getTitle());
 			temp.setBookAuthorID(b.getBookAuthorID());
 			temp.setBookPubID(b.getBookPubID());
 			BookDAO bdao = new BookDAO(conn);
@@ -209,7 +238,6 @@ public class AdminService {
 		{
 			conn.close();					//close connection
 			System.out.println("\n");
-			Main.run();
 		}
 	}
 	
@@ -252,8 +280,17 @@ public class AdminService {
 			Book temp = new Book();
 			temp.setBookID(id);
 			BookDAO bdao = new BookDAO(conn);
-
 			
+			BookCopies copiesTemp = new BookCopies();
+			copiesTemp.getCopyBookID().setBookID(id);
+			BookCopiesDAO bcdao = new BookCopiesDAO(conn);
+			
+			BookLoans loanTemp = new BookLoans();
+			loanTemp.getLoanBookID().setBookID(id);
+			BookLoansDAO bldao = new BookLoansDAO(conn);
+			
+			bldao.deleteBookLoanBookID(loanTemp);
+			bcdao.deleteBookCopiesBookID(copiesTemp);
 			bdao.deleteBook(temp);			
 			
 			System.out.println("Deleted");
@@ -298,20 +335,31 @@ public class AdminService {
 		}
 	}
 	
-	
-	
-	
-	/*
-	 *
-	 * 
-	 * FIX THIS FOR DELETE DOUBLE CHECK EVERYTHING
-	 * 
-	 * 
-	 * 
-	 */
+	public void showAllBooks() throws SQLException
+	{
+		Connection conn = null;
+		try {
+			conn = connUtil.getConnection();
+			BookDAO bdao = new BookDAO(conn);
 			
-	
-	
+			
+			List<Book> bList = bdao.getAllBooks();
+			
+			for(Book b : bList)
+			{
+				System.out.println(b.toString());
+			}
+		}catch (Exception e)
+		{
+			e.printStackTrace();	
+			conn.rollback();				//if it fails, roll back
+		}
+		finally
+		{
+			conn.close();					//close connection
+			System.out.println("\n");
+		}
+	}
 	
 	//---------------BOOK COPIES--------------------------------------------------------------------------------
 	public void addNewBookCopy(BookCopies bc) throws SQLException 
@@ -430,18 +478,30 @@ public class AdminService {
 		}
 	}
 	
-	/*
-	 *
-	 * 
-	 * FIX THIS FOR DELETE DOUBLE CHECK EVERYTHING
-	 * 
-	 * 
-	 * 
-	 */
+	public void showAllBookCopies() throws SQLException
+	{
+		Connection conn = null;
+		try {
+			conn = connUtil.getConnection();
+			BookCopiesDAO bcdao = new BookCopiesDAO(conn);
 			
-	
-	
-	
+			
+			List<BookCopies> bcList = bcdao.getAllBookCopies();
+			for(BookCopies bc : bcList)
+			{
+				System.out.println(bc.toString());
+			}
+		}catch (Exception e)
+		{
+			e.printStackTrace();	
+			conn.rollback();				//if it fails, roll back
+		}
+		finally
+		{
+			conn.close();					//close connection
+			System.out.println("\n");
+		}
+	}
 	//---------------BOOK LOANS--------------------------------------------------------------------------------
 	public void addNewBookLoan(BookLoans bl) throws SQLException 
 	{
@@ -468,8 +528,7 @@ public class AdminService {
 			conn.rollback();				//if it fails, roll back
 		}
 		finally
-		{
-			conn.close();					//close connection
+		{ 
 			System.out.println("\n");
 			Main.run();						//calls the main menu run function to continue to run
 		}
@@ -480,7 +539,7 @@ public class AdminService {
 		Connection conn = null;
 		try {
 			conn = connUtil.getConnection();
-BookLoans temp = new BookLoans();
+			BookLoans temp = new BookLoans();
 			
 			temp.setLoanBookID(bl.getLoanBookID());
 			temp.setLoanBranchID(bl.getLoanBranchID());
@@ -508,21 +567,22 @@ BookLoans temp = new BookLoans();
 		}
 	}	
 	
-	/*
-	 * this will require both the book id and branch id
-	 */
-	
 	public void deleteBookLoan(BookLoans bl) throws SQLException
 	{
 		Connection conn = null;
 		try {
 			conn = connUtil.getConnection();
-			BookCopies temp = new BookCopies();
+			BookLoans temp = new BookLoans();
+			temp.setLoanBookID(bl.getLoanBookID());
+			temp.setLoanBranchID(bl.getLoanBranchID());
+			temp.setLoanCardNum(bl.getLoanCardNum());
+			temp.setDateOut(bl.getDateOut());
+			temp.setDueDate(bl.getDueDate());
 			
-			BookCopiesDAO bdao = new BookCopiesDAO(conn);
+			BookLoansDAO bdao = new BookLoansDAO(conn);
 
 			
-			bdao.deleteBookCopies(temp);			
+			bdao.deleteBookLoans(temp);			
 			
 			System.out.println("Deleted");
 			conn.commit();					//if it is all good, commit the changes
@@ -544,13 +604,13 @@ BookLoans temp = new BookLoans();
 		Connection conn = null;
 		try {
 			conn = connUtil.getConnection();
-			BookCopiesDAO bcdao = new BookCopiesDAO(conn);
+			BookLoansDAO bldao = new BookLoansDAO(conn);
 			
 			
-			List<BookCopies> bcList = bcdao.getAllBookCopies();
-			for(BookCopies bc : bcList)
+			List<BookLoans> blList = bldao.getAllBookLoans();
+			for(BookLoans bl : blList)
 			{
-				System.out.println(bc.toString());
+				System.out.println(bl.toString());
 			}
 		}catch (Exception e)
 		{
@@ -565,36 +625,30 @@ BookLoans temp = new BookLoans();
 		}
 	}	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	public void showAllBookLoans() throws SQLException
+	{
+		Connection conn = null;
+		try {
+			conn = connUtil.getConnection();
+			BookLoansDAO bldao = new BookLoansDAO(conn);
+			
+			
+			List<BookLoans> blList = bldao.getAllBookLoans();
+			for(BookLoans bl : blList)
+			{
+				System.out.println(bl.toString());
+			}
+		}catch (Exception e)
+		{
+			e.printStackTrace();	
+			conn.rollback();				//if it fails, roll back
+		}
+		finally
+		{
+			conn.close();					//close connection
+			System.out.println("\n");
+		}
+	}	
 	
 //---------------BORROWER--------------------------------------------------------------------------------
 	public void addNewBorrower(Borrower borw) throws SQLException 
@@ -660,6 +714,91 @@ BookLoans temp = new BookLoans();
 		}
 	}
 	
+	public void updateBorrowerName(Borrower borw) throws SQLException
+	{
+		Connection conn = null;
+		try {
+			conn = connUtil.getConnection();
+			Borrower temp = new Borrower();
+			
+			temp.setCardNum(borw.getCardNum());
+			temp.setbName(borw.getbName());
+			
+			BorrowerDAO borwdao = new BorrowerDAO(conn);
+			
+			borwdao.updateBorrowerName(temp);
+			System.out.println("Updated");
+			conn.commit();					//if it is all good, commit the changes
+
+		}catch (Exception e)
+		{
+			System.out.println("Something went wrong. One of the IDs might not exist");
+			e.printStackTrace();	
+			conn.rollback();				//if it fails, roll back
+		}
+		finally
+		{
+			conn.close();					//close connection
+			System.out.println("\n");
+		}
+	}
+	
+	public void updateBorrowerAddress(Borrower borw) throws SQLException
+	{
+		Connection conn = null;
+		try {
+			conn = connUtil.getConnection();
+			Borrower temp = new Borrower();
+			
+			temp.setCardNum(borw.getCardNum());
+			temp.setbAddress(borw.getbAddress());			
+			BorrowerDAO borwdao = new BorrowerDAO(conn);
+			
+			borwdao.updateBorrowerAddress(temp);
+			System.out.println("Updated");
+			conn.commit();					//if it is all good, commit the changes
+
+		}catch (Exception e)
+		{
+			System.out.println("Something went wrong. One of the IDs might not exist");
+			e.printStackTrace();	
+			conn.rollback();				//if it fails, roll back
+		}
+		finally
+		{
+			conn.close();					//close connection
+			System.out.println("\n");
+		}
+	}
+	
+	public void updateBorrowerPhone(Borrower borw) throws SQLException
+	{
+		Connection conn = null;
+		try {
+			conn = connUtil.getConnection();
+			Borrower temp = new Borrower();
+			
+			temp.setCardNum(borw.getCardNum());
+			temp.setbPhone(borw.getbPhone());		
+			BorrowerDAO borwdao = new BorrowerDAO(conn);
+			
+			borwdao.updateBorrowerPhone(temp);
+			System.out.println("Updated");
+			conn.commit();					//if it is all good, commit the changes
+
+		}catch (Exception e)
+		{
+			System.out.println("Something went wrong. One of the IDs might not exist");
+			e.printStackTrace();	
+			conn.rollback();				//if it fails, roll back
+		}
+		finally
+		{
+			conn.close();					//close connection
+			System.out.println("\n");
+		}
+	}
+	
 	public void deleteBorrower(int id) throws SQLException
 	{
 		Connection conn = null;
@@ -709,6 +848,31 @@ BookLoans temp = new BookLoans();
 			conn.close();					//close connection
 			System.out.println("\n");
 			Main.run();
+		}
+	}	
+	
+	public void showAllBorrowers() throws SQLException
+	{
+		Connection conn = null;
+		try {
+			conn = connUtil.getConnection();
+			BorrowerDAO borwdao = new BorrowerDAO(conn);			
+			
+			List<Borrower> borwList = borwdao.getAllBorrowers();
+			
+			for(Borrower borw : borwList)
+			{
+				System.out.println(borw.toString());
+			}
+		}catch (Exception e)
+		{
+			e.printStackTrace();	
+			conn.rollback();				//if it fails, roll back
+		}
+		finally
+		{
+			conn.close();					//close connection
+			System.out.println("\n");
 		}
 	}	
 	
@@ -800,7 +964,6 @@ BookLoans temp = new BookLoans();
 		{
 			conn.close();					//close connection
 			System.out.println("\n");
-			Main.run();
 		}
 	}
 	
@@ -830,7 +993,6 @@ BookLoans temp = new BookLoans();
 		{
 			conn.close();					//close connection
 			System.out.println("\n");
-			Main.run();
 		}
 	}
 	public void deleteLibraryBranch(int id) throws SQLException
@@ -882,6 +1044,31 @@ BookLoans temp = new BookLoans();
 			conn.close();					//close connection
 			System.out.println("\n");
 			Main.run();
+		}
+	}	
+	
+	public void showAllLibraryBranches() throws SQLException
+	{
+		Connection conn = null;
+		try {
+			conn = connUtil.getConnection();
+			LibraryBranchDAO lbdao = new LibraryBranchDAO(conn);			
+			
+			List<LibraryBranch> lbList = lbdao.getAllLibraryBranchs();
+			
+			for(LibraryBranch lb : lbList)
+			{
+				System.out.println(lb.toString());
+			}
+		}catch (Exception e)
+		{
+			e.printStackTrace();	
+			conn.rollback();				//if it fails, roll back
+		}
+		finally
+		{
+			conn.close();					//close connection
+			System.out.println("\n");
 		}
 	}	
 	
@@ -949,6 +1136,93 @@ BookLoans temp = new BookLoans();
 		}
 	}
 	
+	public void updatePublisherName(Publisher pub) throws SQLException
+	{
+		Connection conn = null;
+		try {
+			conn = connUtil.getConnection();
+			Publisher temp = new Publisher();
+			
+			temp.setPublisherID(pub.getPublisherID());
+			temp.setPublisherName(pub.getPublisherName());
+
+			PublisherDAO pubdao = new PublisherDAO(conn);
+			
+			pubdao.updatePublisherName(temp);
+			System.out.println("Updated");
+			conn.commit();					//if it is all good, commit the changes
+
+		}catch (Exception e)
+		{
+			System.out.println("Something went wrong. One of the IDs might not exist");
+			e.printStackTrace();	
+			conn.rollback();				//if it fails, roll back
+		}
+		finally
+		{
+			conn.close();					//close connection
+			System.out.println("\n");
+		}
+	}
+	
+	public void updatePublisherAddress(Publisher pub) throws SQLException
+	{
+		Connection conn = null;
+		try {
+			conn = connUtil.getConnection();
+			Publisher temp = new Publisher();
+			
+			temp.setPublisherID(pub.getPublisherID());
+			temp.setPublisherAddress(pub.getPublisherAddress());
+
+			PublisherDAO pubdao = new PublisherDAO(conn);
+			
+			pubdao.updatePublisherAddress(temp);
+			System.out.println("Updated");
+			conn.commit();					//if it is all good, commit the changes
+
+		}catch (Exception e)
+		{
+			System.out.println("Something went wrong. One of the IDs might not exist");
+			e.printStackTrace();	
+			conn.rollback();				//if it fails, roll back
+		}
+		finally
+		{
+			conn.close();					//close connection
+			System.out.println("\n");
+		}
+	}
+	
+	public void updatePublisherPhone(Publisher pub) throws SQLException
+	{
+		Connection conn = null;
+		try {
+			conn = connUtil.getConnection();
+			Publisher temp = new Publisher();
+			
+			temp.setPublisherID(pub.getPublisherID());
+			temp.setPublisherPhone(pub.getPublisherPhone());
+
+			PublisherDAO pubdao = new PublisherDAO(conn);
+			
+			pubdao.updatePublisherPhone(temp);
+			System.out.println("Updated");
+			conn.commit();					//if it is all good, commit the changes
+
+		}catch (Exception e)
+		{
+			System.out.println("Something went wrong. One of the IDs might not exist");
+			e.printStackTrace();	
+			conn.rollback();				//if it fails, roll back
+		}
+		finally
+		{
+			conn.close();					//close connection
+			System.out.println("\n");
+		}
+	}
+	
 	public void deletePublisher(int id) throws SQLException
 	{
 		Connection conn = null;
@@ -958,6 +1232,11 @@ BookLoans temp = new BookLoans();
 			temp.setPublisherID(id);
 			PublisherDAO pubdao = new PublisherDAO(conn);
 			
+			Book bookTemp = new Book();
+			bookTemp.getBookPubID().setPublisherID(id);
+			BookDAO bdao = new BookDAO(conn);
+
+			bdao.deleteBookPublisher(bookTemp); 			//delete the book with the publisher id
 			pubdao.deletePublisher(temp);			
 			
 			System.out.println("Deleted");
@@ -999,6 +1278,32 @@ BookLoans temp = new BookLoans();
 			conn.close();					//close connection
 			System.out.println("\n");
 			Main.run();
+		}
+	}
+	
+	public void showAllPublishers() throws SQLException
+	{
+		Connection conn = null;
+		try {
+			conn = connUtil.getConnection();
+			PublisherDAO pubdao = new PublisherDAO(conn);
+			
+			
+			List<Publisher> pList = pubdao.getAllPublishers();
+			
+			for(Publisher p : pList)
+			{
+				System.out.println(p.toString());
+			}
+		}catch (Exception e)
+		{
+			e.printStackTrace();	
+			conn.rollback();				//if it fails, roll back
+		}
+		finally
+		{
+			conn.close();					//close connection
+			System.out.println("\n");
 		}
 	}
 }

@@ -5,24 +5,10 @@ public class Book {
 	private String title;
 	private Author bookAuthorID = new Author();
 	private Publisher bookPubID = new Publisher();
-
-	public Book()
-	{
-		
-	}
 	
 	@Override
 	public String toString() {
-		return "bookID= " + bookID + ", title= " + title + ", bookAuthorID= " + bookAuthorID + ", bookPubID= "+ bookPubID;
-	}
-
-	//needed for testing
-	public Book(Integer bookID, String title, Author bookAuthorID, Publisher bookPubID) {
-		super();
-		this.bookID = bookID;
-		this.title = title;
-		this.bookAuthorID = bookAuthorID;
-		this.bookPubID = bookPubID;
+		return "bookID= " + bookID + ", title= " + title + ", bookAuthorID= " + bookAuthorID.getAuthorID() + ", bookPubID= "+ bookPubID.getPublisherID();
 	}
 	
 	public Publisher getBookPubID() {

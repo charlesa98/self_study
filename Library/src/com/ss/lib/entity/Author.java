@@ -1,13 +1,13 @@
 package com.ss.lib.entity;
 
-public class Author {
+public class Author {	
+	private Integer authorID;
+	private String authorName;
+	
 	@Override
 	public String toString() {
 		return "authorID= " + authorID + ", authorName= " + authorName;
 	}
-
-	private Integer authorID;
-	private String authorName;
 
 	public int getAuthorID() {
 		return authorID;

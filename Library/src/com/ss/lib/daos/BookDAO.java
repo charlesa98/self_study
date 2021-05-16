@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ss.lib.entity.Book;
+import com.ss.lib.entity.BookCopies;
 
 public class BookDAO extends BaseDAO<Book>{
 
@@ -49,11 +50,27 @@ public class BookDAO extends BaseDAO<Book>{
 		save("DELETE FROM tbl_book where bookId = ?", new Object[] {book.getBookID()});
 	}
 	
+	public void deleteBookAuthor(Book book)throws ClassNotFoundException, SQLException					//for when the author is deleted
+	{
+		save("DELETE FROM tbl_book where authId = ?", new Object[] {book.getBookAuthorID().getAuthorID()});
+	}
+	
+	public void deleteBookPublisher(Book book)throws ClassNotFoundException, SQLException				//for when the publisher is deleted
+	{
+		save("DELETE FROM tbl_book where pubId = ?", new Object[] {book.getBookPubID().getPublisherID()});
+	}
+	
 	public List<Book> getAllBooks() throws ClassNotFoundException, SQLException
 	{
 		return read("select * from tbl_book", null);
 		
 	}
+	
+	public List<Book> getAllBookID(BookCopies book) throws ClassNotFoundException, SQLException
+	{
+		return read("select title from tbl_book where bookId = ?", new Object[] {book.getCopyBookID().getBookID()});	
+	}
+	
 	@Override
 	public List<Book> extractData(ResultSet rs) throws ClassNotFoundException, SQLException {
 		List<Book> books = new ArrayList<>();

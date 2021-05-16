@@ -27,36 +27,51 @@ public class BookLoansDAO extends BaseDAO<BookLoans>{
 	
 	public void updateBookLoans(BookLoans loan) throws ClassNotFoundException, SQLException
 	{
-		save("UPDATE tbl_book_loans set dateOut = ?, dueDate = ? where bookId = ?, branchId = ?, cardNo = ?", 
+		save("UPDATE tbl_book_loans set dateOut = ?, dueDate = ? where bookId = ? and branchId = ? and cardNo = ?", 
 				new Object[] {loan.getDateOut(), loan.getDueDate(), loan.getLoanBookID().getBookID(), loan.getLoanBranchID().getBranchID(), 
 						loan.getLoanCardNum().getCardNum()});
 	}
 	
 	public void updateBookLoansDateOut(BookLoans loan) throws ClassNotFoundException, SQLException
 	{
-		save("UPDATE tbl_book_loans set dateOut = ? where bookId = ?, branchId = ?, cardNo = ?", 
+		save("UPDATE tbl_book_loans set dateOut = ? where bookId = ? and branchId = ? and cardNo = ?", 
 				new Object[] {loan.getDateOut(), loan.getLoanBookID().getBookID(), loan.getLoanBranchID().getBranchID(), 
 						loan.getLoanCardNum().getCardNum()});
 	}
 	
 	public void updateBookLoansDueDate(BookLoans loan) throws ClassNotFoundException, SQLException
 	{
-		save("UPDATE tbl_book_loans set dueDate = ? where bookId = ?, branchId = ?, cardNo = ?", 
+		save("UPDATE tbl_book_loans set dueDate = ? where bookId = ? and branchId = ? and cardNo = ?", 
 				new Object[] {loan.getDueDate(), loan.getLoanBookID().getBookID(), loan.getLoanBranchID().getBranchID(), 
 						loan.getLoanCardNum().getCardNum()});
 	}
 	
 	public void deleteBookLoans(BookLoans loan) throws ClassNotFoundException, SQLException
 	{
-		save("DELETE FROM tbl_book_loans where bookId = ?, branchId = ?, cardNo = ?", new Object[] {loan.getLoanBookID().getBookID(),
+		save("DELETE FROM tbl_book_loans where bookId = ? and branchId = ? and cardNo = ?", new Object[] {loan.getLoanBookID().getBookID(),
 				loan.getLoanBranchID().getBranchID(), loan.getLoanCardNum().getCardNum()});
 	}
 	
-	public List<BookLoans> getAllBookLoanss() throws ClassNotFoundException, SQLException
+	public void deleteBookLoanBookID(BookLoans loan) throws ClassNotFoundException, SQLException
+	{
+		save("DELETE FROM tbl_book_loans where bookId = ?", new Object[] {loan.getLoanBookID().getBookID()});
+	}
+	
+	public void deleteBookLoanBookCard(BookLoans loan) throws ClassNotFoundException, SQLException
+	{
+		save("DELETE FROM tbl_book_loans where bookId = ? and cardNo = ?", new Object[] {loan.getLoanBookID().getBookID(), loan.getLoanCardNum().getCardNum()});
+	}
+	
+	public List<BookLoans> getAllBookLoans() throws ClassNotFoundException, SQLException
 	{
 		return read("select * from tbl_book_loans", null);
-		
 	}
+	
+	public List<BookLoans> getBookLoans(BookLoans b) throws ClassNotFoundException, SQLException
+	{
+		return read("select a.* from tbl_book a, tbl_book_loans b where a.BookId = b.bookID AND b.cardNo = ?", new Object[] {b.getLoanCardNum().getCardNum()});	
+	}
+	
 	@Override
 	public List<BookLoans> extractData(ResultSet rs) throws ClassNotFoundException, SQLException {
 		List<BookLoans> loans = new ArrayList<>();

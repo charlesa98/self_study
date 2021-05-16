@@ -1,16 +1,17 @@
 package com.ss.lib.entity;
 
 public class BookLoans {
-	@Override
-	public String toString() {
-		return "loanBookID= " + loanBookID + ", loanBranchID= " + loanBranchID + ", loanCardNum= " + loanCardNum
-				+ ", dateOut= " + dateOut + ", dueDate= " + dueDate;
-	}
 	private Book loanBookID = new Book();
 	private LibraryBranch loanBranchID = new LibraryBranch();
 	private Borrower loanCardNum = new Borrower();
 	private String dateOut;
 	private String dueDate;
+	
+	@Override
+	public String toString() {
+		return "loanBookID= " + loanBookID.getBookID() + ", loanBranchID= " + loanBranchID.getBranchID() + ", loanCardNum= " + loanCardNum.getCardNum()
+				+ ", dateOut= " + dateOut + ", dueDate= " + dueDate;
+	}
 	
 	public Book getLoanBookID() {
 		return loanBookID;

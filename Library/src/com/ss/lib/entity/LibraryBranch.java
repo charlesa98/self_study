@@ -1,13 +1,14 @@
 package com.ss.lib.entity;
 
 public class LibraryBranch {
+	private Integer branchID;
+	private String branchName;
+	private String branchAddress;
+	
 	@Override
 	public String toString() {
 		return "branchID= " + branchID + ", branchName= " + branchName + ", branchAddress= " + branchAddress;
 	}
-	private Integer branchID;
-	private String branchName;
-	private String branchAddress;
 	
 	public Integer getBranchID() {
 		return branchID;

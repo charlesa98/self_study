@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import com.ss.lib.entity.Borrower;
+import com.ss.lib.menus.Admin1;
+import com.ss.lib.menus.Main;
 /*
  * Main -> Admin1 -> AdminBorrowers
  */
@@ -14,7 +16,7 @@ public class AdminBorrowers {
 	
 	private void header1()
 	{
-		System.out.println("\nADD/UPDATE/DELETE/READ BORROWERS");
+		System.out.println("\nADD/UPDATE/DELETE/READ BORROWERS or QUIT to previous menu");
 	}
 	
 	public void performNext() throws SQLException 
@@ -43,6 +45,8 @@ public class AdminBorrowers {
 		else if(choice.equalsIgnoreCase("quit") || choice.equalsIgnoreCase("q"))
 		{
 			System.out.println("Quitting");
+			Admin1 a1 = new Admin1();
+			a1.run();
 		}
 		else
 		{
@@ -79,7 +83,9 @@ public class AdminBorrowers {
 		input.close();
 		}catch(NumberFormatException e)
 		{
-			System.out.println("You have entered a non number");
+			System.out.println("You have entered a non number and will be returned to the previous menu");
+			Admin1 a1 = new Admin1();
+			a1.run();
 		}
 	}
 	
@@ -87,6 +93,9 @@ public class AdminBorrowers {
 	{
 		try {
 			Scanner input = new Scanner(System.in);
+			
+			service.showAllBorrowers();
+			
 			System.out.println("\nUPDATE Borrowers");
 			System.out.println("Enter the Borrower Card Number");
 			int id = Integer.parseInt(input.nextLine());
@@ -101,17 +110,36 @@ public class AdminBorrowers {
 			String phone = input.nextLine();
 			
 			borw.setCardNum(id);
-			borw.setbName(name);
-			borw.setbAddress(addr);
-			borw.setbPhone(phone);
 			
-			service.updateBorrower(borw);
-			
+			if(name.isEmpty() == false)			//if the user did input a value to change, change it
+			{
+				borw.setbName(name);
+				service.updateBorrowerName(borw);
+			}
+			if(addr.isEmpty() == false)
+			{
+				borw.setbAddress(addr);
+				service.updateBorrowerAddress(borw);
+			}
+			if(phone.isEmpty()==false)
+			{
+				borw.setbPhone(phone);
+				service.updateBorrowerPhone(borw);
+			}			
+			if(name.isEmpty() == true && addr.isEmpty() == true && phone.isEmpty() == true)
+			{
+				System.out.println("Nothing has been changed. Returning to previous menu\n");
+				Admin1 a1 = new Admin1();
+				a1.run();
+			}
 			input.close();
+			Main.run();
 		}
 		catch(NumberFormatException e)
 		{
-			System.out.println("You have entered a non number");
+			System.out.println("You have entered a non number and will be returned to the previous menu");
+			Admin1 a1 = new Admin1();
+			a1.run();
 		}
 	}
 	
@@ -119,6 +147,8 @@ public class AdminBorrowers {
 	{
 		try {
 			Scanner input = new Scanner(System.in);
+			
+			service.showAllBorrowers();
 			
 			System.out.println("DELETE Borrower");
 			System.out.println("Borrower to delete?");
@@ -129,7 +159,9 @@ public class AdminBorrowers {
 		}
 		catch(NumberFormatException e)
 		{
-			System.out.println("You have entered a non number");
+			System.out.println("You have entered a non number and will be returned to the previous menu");
+			Admin1 a1 = new Admin1();
+			a1.run();
 		}
 	}
 	
