@@ -101,14 +101,14 @@ public class Tests {
 		a.setAuthorName("John");
 		
 		try {
-			adao.deleteAuthor(a);								//delete it first just incase it was already created before
+			adao.deleteAuthor(a);								//delete it first just in case it was already created before
 			conn.commit();
 			adao.addAuthor(a);
 			conn.commit();
-			assertEquals(57, adao.getAllAuthors().size());		//I created 57
+			assertEquals(58, adao.getAllAuthors().size());		//I created 57
 			adao.deleteAuthor(a);
 			conn.commit();
-			assertEquals(56, adao.getAllAuthors().size());
+			assertEquals(57, adao.getAllAuthors().size());
 		}catch(ClassNotFoundException | SQLException e)
 		{
 			e.printStackTrace();
@@ -169,7 +169,85 @@ public class Tests {
 			pdao.addPublisher(p);
 			p.setPublisherName("Jimmy");
 			p.setPublisherAddress("124 street");
-			p.setPublisherPhone("1800");
+			p.setPublisherPhone("1-800-032-4231");
+			pdao.updatePublisher(p);
+			conn.commit();
+			pdao.deletePublisher(p);
+			conn.commit();
+		}catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void testUpdatePublisherName() throws ClassNotFoundException, SQLException
+	{
+		conn = connUtil.getConnection();
+		PublisherDAO pdao = new PublisherDAO(conn);
+		p.setPublisherID(543535);
+		p.setPublisherName("Jim");
+		p.setPublisherAddress("123 street");
+		p.setPublisherPhone("1800");
+		
+		try {
+			pdao.deletePublisher(p);
+			conn.commit();
+			pdao.addPublisher(p);
+			p.setPublisherName("Jimmy");
+			pdao.updatePublisher(p);
+			conn.commit();
+			pdao.deletePublisher(p);
+			conn.commit();
+		}catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void testUpdatePublisherAddress() throws ClassNotFoundException, SQLException
+	{
+		conn = connUtil.getConnection();
+		PublisherDAO pdao = new PublisherDAO(conn);
+		p.setPublisherID(543535);
+		p.setPublisherName("Jim");
+		p.setPublisherAddress("123 street");
+		p.setPublisherPhone("1800");
+		
+		try {
+			pdao.deletePublisher(p);
+			conn.commit();
+			pdao.addPublisher(p);
+			p.setPublisherAddress("124 street");
+			pdao.updatePublisher(p);
+			conn.commit();
+			pdao.deletePublisher(p);
+			conn.commit();
+		}catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void testUpdatePublisherPhone() throws ClassNotFoundException, SQLException
+	{
+		conn = connUtil.getConnection();
+		PublisherDAO pdao = new PublisherDAO(conn);
+		p.setPublisherID(543535);
+		p.setPublisherName("Jim");
+		p.setPublisherAddress("123 street");
+		p.setPublisherPhone("1800");
+		
+		try {
+			pdao.deletePublisher(p);
+			conn.commit();
+			pdao.addPublisher(p);
+			p.setPublisherPhone("1-800-000-0000");
 			pdao.updatePublisher(p);
 			conn.commit();
 			pdao.deletePublisher(p);
@@ -281,6 +359,57 @@ public class Tests {
 			conn.commit();
 			lbdao.addLibraryBranch(lb);
 			lb.setBranchName("Test Branch");
+			lb.setBranchAddress("Some Street");
+			lbdao.updateLibraryBranch(lb);
+			conn.commit();
+			lbdao.deleteLibraryBranch(lb);
+			conn.commit();
+		}catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void testUpdateBranchName() throws ClassNotFoundException, SQLException
+	{
+		conn = connUtil.getConnection();
+		LibraryBranchDAO lbdao = new LibraryBranchDAO(conn);
+		lb.setBranchID(54326);
+		lb.setBranchName("Test branch");
+		lb.setBranchAddress("Test street");
+		
+		try {
+			lbdao.deleteLibraryBranch(lb);
+			conn.commit();
+			lbdao.addLibraryBranch(lb);
+			lb.setBranchName("Test Branch");
+			lbdao.updateLibraryBranch(lb);
+			conn.commit();
+			lbdao.deleteLibraryBranch(lb);
+			conn.commit();
+		}catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void testUpdateBranchAddress() throws ClassNotFoundException, SQLException
+	{
+		conn = connUtil.getConnection();
+		LibraryBranchDAO lbdao = new LibraryBranchDAO(conn);
+		lb.setBranchID(54326);
+		lb.setBranchName("Test branch");
+		lb.setBranchAddress("Test street");
+		
+		try {
+			lbdao.deleteLibraryBranch(lb);
+			conn.commit();
+			lbdao.addLibraryBranch(lb);
+			lb.setBranchAddress("Some Street");
 			lbdao.updateLibraryBranch(lb);
 			conn.commit();
 			lbdao.deleteLibraryBranch(lb);
@@ -441,6 +570,137 @@ public class Tests {
 		}
 	}	
 	
+	@Test(timeout = 3000)
+	public void testUpdateBookTitle() throws ClassNotFoundException, SQLException
+	{
+		conn = connUtil.getConnection();
+		BookDAO bdao = new BookDAO(conn);
+		AuthorDAO adao = new AuthorDAO(conn);
+		PublisherDAO pdao = new PublisherDAO(conn);
+		
+		a.setAuthorID(756468);
+		a.setAuthorName("John");
+		
+		p.setPublisherID(423435567);
+		p.setPublisherName("Jim");
+		p.setPublisherAddress("123 street");
+		p.setPublisherPhone("1800");
+		
+		b.setBookID(456235676);
+		b.setTitle("Test Book Title");
+		b.setBookAuthorID(a);
+		b.setBookPubID(p);		
+		
+		try {
+			bdao.deleteBook(b);
+			adao.deleteAuthor(a);
+			pdao.deletePublisher(p);
+			conn.commit();
+			adao.addAuthor(a);
+			pdao.addPublisher(p);	
+			b.setTitle("Test New Title");
+			bdao.updateBook(b);
+			conn.commit();
+			
+			bdao.deleteBook(b);
+			adao.deleteAuthor(a);
+			pdao.deletePublisher(p);
+			conn.commit();
+		}catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test(timeout = 3000)
+	public void testUpdateBookAuthor() throws ClassNotFoundException, SQLException
+	{
+		conn = connUtil.getConnection();
+		BookDAO bdao = new BookDAO(conn);
+		AuthorDAO adao = new AuthorDAO(conn);
+		PublisherDAO pdao = new PublisherDAO(conn);
+		
+		a.setAuthorID(756468);
+		a.setAuthorName("John");
+		
+		p.setPublisherID(423435567);
+		p.setPublisherName("Jim");
+		p.setPublisherAddress("123 street");
+		p.setPublisherPhone("1800");
+		
+		b.setBookID(456235676);
+		b.setTitle("Test Book Title");
+		b.setBookAuthorID(a);
+		b.setBookPubID(p);		
+		
+		try {
+			bdao.deleteBook(b);
+			adao.deleteAuthor(a);
+			pdao.deletePublisher(p);
+			conn.commit();
+			adao.addAuthor(a);
+			pdao.addPublisher(p);	
+			a.setAuthorID(45564);
+			b.setBookAuthorID(a);
+			bdao.updateBook(b);
+			conn.commit();
+			
+			bdao.deleteBook(b);
+			adao.deleteAuthor(a);
+			pdao.deletePublisher(p);
+			conn.commit();
+		}catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test(timeout = 3000)
+	public void testUpdateBookPublisher() throws ClassNotFoundException, SQLException
+	{
+		conn = connUtil.getConnection();
+		BookDAO bdao = new BookDAO(conn);
+		AuthorDAO adao = new AuthorDAO(conn);
+		PublisherDAO pdao = new PublisherDAO(conn);
+		
+		a.setAuthorID(756468);
+		a.setAuthorName("John");
+		
+		p.setPublisherID(423435567);
+		p.setPublisherName("Jim");
+		p.setPublisherAddress("123 street");
+		p.setPublisherPhone("1800");
+		
+		b.setBookID(456235676);
+		b.setTitle("Test Book Title");
+		b.setBookAuthorID(a);
+		b.setBookPubID(p);		
+		
+		try {
+			bdao.deleteBook(b);
+			adao.deleteAuthor(a);
+			pdao.deletePublisher(p);
+			conn.commit();
+			adao.addAuthor(a);
+			pdao.addPublisher(p);	
+			p.setPublisherID(6453);
+			b.setBookPubID(p);
+			bdao.updateBook(b);
+			conn.commit();
+			
+			bdao.deleteBook(b);
+			adao.deleteAuthor(a);
+			pdao.deletePublisher(p);
+			conn.commit();
+		}catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
 	@Test (timeout = 3000)
 	public void testDeleteBook() throws ClassNotFoundException, SQLException
 	{
@@ -472,6 +732,88 @@ public class Tests {
 			bdao.addBook(b);				
 			conn.commit();
 			bdao.deleteBook(b);
+			adao.deleteAuthor(a);
+			pdao.deletePublisher(p);
+			conn.commit();
+		}catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test (timeout = 3000)
+	public void testDeleteBookAuthor() throws ClassNotFoundException, SQLException
+	{
+		conn = connUtil.getConnection();
+		BookDAO bdao = new BookDAO(conn);
+		AuthorDAO adao = new AuthorDAO(conn);
+		PublisherDAO pdao = new PublisherDAO(conn);
+		
+		a.setAuthorID(7560);
+		a.setAuthorName("John");
+		
+		p.setPublisherID(42343543);
+		p.setPublisherName("Jim");
+		p.setPublisherAddress("123 street");
+		p.setPublisherPhone("1800");
+		
+		b.setBookID(45623459);
+		b.setTitle("Test Book Title");
+		b.setBookAuthorID(a);
+		b.setBookPubID(p);		
+		
+		try {
+			bdao.deleteBook(b);
+			adao.deleteAuthor(a);
+			pdao.deletePublisher(p);
+			conn.commit();
+			adao.addAuthor(a);
+			pdao.addPublisher(p);
+			bdao.addBook(b);				
+			conn.commit();
+			bdao.deleteBookAuthor(b);
+			adao.deleteAuthor(a);
+			pdao.deletePublisher(p);
+			conn.commit();
+		}catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test (timeout = 3000)
+	public void testDeleteBookPublisher() throws ClassNotFoundException, SQLException
+	{
+		conn = connUtil.getConnection();
+		BookDAO bdao = new BookDAO(conn);
+		AuthorDAO adao = new AuthorDAO(conn);
+		PublisherDAO pdao = new PublisherDAO(conn);
+		
+		a.setAuthorID(7560);
+		a.setAuthorName("John");
+		
+		p.setPublisherID(42343543);
+		p.setPublisherName("Jim");
+		p.setPublisherAddress("123 street");
+		p.setPublisherPhone("1800");
+		
+		b.setBookID(45623459);
+		b.setTitle("Test Book Title");
+		b.setBookAuthorID(a);
+		b.setBookPubID(p);		
+		
+		try {
+			bdao.deleteBook(b);
+			adao.deleteAuthor(a);
+			pdao.deletePublisher(p);
+			conn.commit();
+			adao.addAuthor(a);
+			pdao.addPublisher(p);
+			bdao.addBook(b);				
+			conn.commit();
+			bdao.deleteBookPublisher(b);
 			adao.deleteAuthor(a);
 			pdao.deletePublisher(p);
 			conn.commit();
@@ -575,6 +917,86 @@ public class Tests {
 			conn.commit();
 			bowdao.addBorrower(bow);
 			bow.setbName("Jan");
+			bow.setbAddress("122 Street");
+			bow.setbPhone("1-800-000-0000");
+			bowdao.updateBorrower(bow);
+			conn.commit();
+			bowdao.deleteBorrower(bow);
+			conn.commit();
+		}catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void testUpdateBorrowerName() throws ClassNotFoundException, SQLException
+	{
+		conn = connUtil.getConnection();
+		BorrowerDAO bowdao = new BorrowerDAO(conn);
+		bow.setCardNum(543535);
+		bow.setbName("Jim");
+		bow.setbAddress("123 street");
+		bow.setbPhone("1800");
+		
+		try {
+			bowdao.deleteBorrower(bow);
+			conn.commit();
+			bowdao.addBorrower(bow);
+			bow.setbName("Jan");
+			bowdao.updateBorrower(bow);
+			conn.commit();
+			bowdao.deleteBorrower(bow);
+			conn.commit();
+		}catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void testUpdateBorrowerAddress() throws ClassNotFoundException, SQLException
+	{
+		conn = connUtil.getConnection();
+		BorrowerDAO bowdao = new BorrowerDAO(conn);
+		bow.setCardNum(543535);
+		bow.setbName("Jim");
+		bow.setbAddress("123 street");
+		bow.setbPhone("1800");
+		
+		try {
+			bowdao.deleteBorrower(bow);
+			conn.commit();
+			bowdao.addBorrower(bow);
+			bow.setbAddress("122 Street");
+			bowdao.updateBorrower(bow);
+			conn.commit();
+			bowdao.deleteBorrower(bow);
+			conn.commit();
+		}catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void testUpdateBorrowerPhone() throws ClassNotFoundException, SQLException
+	{
+		conn = connUtil.getConnection();
+		BorrowerDAO bowdao = new BorrowerDAO(conn);
+		bow.setCardNum(543535);
+		bow.setbName("Jim");
+		bow.setbAddress("123 street");
+		bow.setbPhone("1800");
+		
+		try {
+			bowdao.deleteBorrower(bow);
+			conn.commit();
+			bowdao.addBorrower(bow);
+			bow.setbPhone("1-800-000-0000");
 			bowdao.updateBorrower(bow);
 			conn.commit();
 			bowdao.deleteBorrower(bow);
@@ -893,6 +1315,7 @@ public class Tests {
 			System.out.println(bc.toString());
 		}
 	}
+
 //---------------------------------BOOK LOANS-----------------------------------------------------
 	@Test
 	public void testAddBookLoans() throws ClassNotFoundException, SQLException
@@ -966,6 +1389,154 @@ public class Tests {
 	
 	@Test
 	public void testUpdateBookLoans() throws ClassNotFoundException, SQLException
+	{
+		conn = connUtil.getConnection();
+		BookLoansDAO bldao = new BookLoansDAO(conn);
+		BookDAO bdao = new BookDAO(conn);
+		AuthorDAO adao = new AuthorDAO(conn);
+		PublisherDAO pdao = new PublisherDAO(conn);
+		LibraryBranchDAO lbdao = new LibraryBranchDAO(conn);
+		BorrowerDAO bowdao = new BorrowerDAO(conn);
+		
+		bow.setCardNum(543534);
+		bow.setbName("Jim");
+		bow.setbAddress("123 street");
+		bow.setbPhone("1800");
+		
+		a.setAuthorID(9542435);
+		a.setAuthorName("John");
+		
+		p.setPublisherID(7992719);
+		p.setPublisherName("Jim");
+		p.setPublisherAddress("123 street");
+		p.setPublisherPhone("1800");
+		
+		b.setBookID(178146812);
+		b.setTitle("Test Book Title");
+		b.setBookAuthorID(a);
+		b.setBookPubID(p);		
+		
+		lb.setBranchID(8617345);
+		lb.setBranchName("Test branch");
+		lb.setBranchAddress("Test street");
+		
+		bl.setLoanBookID(b);
+		bl.setLoanBranchID(lb);
+		bl.setLoanCardNum(bow);
+		bl.setDateOut("2021-05-08");
+		bl.setDueDate("2021-05-15");
+		
+		try {
+			bldao.deleteBookLoanBookCard(bl);
+			bowdao.deleteBorrower(bow);
+			lbdao.deleteLibraryBranch(lb);
+			bdao.deleteBook(b);
+			pdao.deletePublisher(p);
+			adao.deleteAuthor(a);
+			conn.commit();
+			
+			bowdao.addBorrower(bow);
+			adao.addAuthor(a);
+			pdao.addPublisher(p);
+			bdao.addBook(b);
+			lbdao.addLibraryBranch(lb);
+			bldao.addBookLoans(bl);
+			conn.commit();
+			
+			bl.setDueDate("2021-05-18");
+			bldao.updateBookLoans(bl);
+			conn.commit();
+		
+			bldao.deleteBookLoans(bl);
+			bowdao.deleteBorrower(bow);
+			lbdao.deleteLibraryBranch(lb);
+			bdao.deleteBook(b);
+			pdao.deletePublisher(p);
+			adao.deleteAuthor(a);
+			conn.commit();
+		}catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void testUpdateBookLoansOut() throws ClassNotFoundException, SQLException
+	{
+		conn = connUtil.getConnection();
+		BookLoansDAO bldao = new BookLoansDAO(conn);
+		BookDAO bdao = new BookDAO(conn);
+		AuthorDAO adao = new AuthorDAO(conn);
+		PublisherDAO pdao = new PublisherDAO(conn);
+		LibraryBranchDAO lbdao = new LibraryBranchDAO(conn);
+		BorrowerDAO bowdao = new BorrowerDAO(conn);
+		
+		bow.setCardNum(543534);
+		bow.setbName("Jim");
+		bow.setbAddress("123 street");
+		bow.setbPhone("1800");
+		
+		a.setAuthorID(9542435);
+		a.setAuthorName("John");
+		
+		p.setPublisherID(7992719);
+		p.setPublisherName("Jim");
+		p.setPublisherAddress("123 street");
+		p.setPublisherPhone("1800");
+		
+		b.setBookID(178146812);
+		b.setTitle("Test Book Title");
+		b.setBookAuthorID(a);
+		b.setBookPubID(p);		
+		
+		lb.setBranchID(8617345);
+		lb.setBranchName("Test branch");
+		lb.setBranchAddress("Test street");
+		
+		bl.setLoanBookID(b);
+		bl.setLoanBranchID(lb);
+		bl.setLoanCardNum(bow);
+		bl.setDateOut("2021-05-08");
+		bl.setDueDate("2021-05-15");
+		
+		try {
+			bldao.deleteBookLoanBookCard(bl);
+			bowdao.deleteBorrower(bow);
+			lbdao.deleteLibraryBranch(lb);
+			bdao.deleteBook(b);
+			pdao.deletePublisher(p);
+			adao.deleteAuthor(a);
+			conn.commit();
+			
+			bowdao.addBorrower(bow);
+			adao.addAuthor(a);
+			pdao.addPublisher(p);
+			bdao.addBook(b);
+			lbdao.addLibraryBranch(lb);
+			bldao.addBookLoans(bl);
+			conn.commit();
+			
+			bl.setDateOut("2021-05-18");
+			bldao.updateBookLoans(bl);
+			conn.commit();
+		
+			bldao.deleteBookLoans(bl);
+			bowdao.deleteBorrower(bow);
+			lbdao.deleteLibraryBranch(lb);
+			bdao.deleteBook(b);
+			pdao.deletePublisher(p);
+			adao.deleteAuthor(a);
+			conn.commit();
+		}catch(ClassNotFoundException | SQLException e)
+		{
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void testUpdateBookLoansDue() throws ClassNotFoundException, SQLException
 	{
 		conn = connUtil.getConnection();
 		BookLoansDAO bldao = new BookLoansDAO(conn);
