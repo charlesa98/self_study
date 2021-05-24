@@ -7,13 +7,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-//import com.ss.utop.dao.RouteDAO;
+import com.ss.utop.dao.FlightBookingsDAO;
 import com.ss.utop.entity.Flight;
+import com.ss.utop.entity.FlightBookings;
 import com.ss.utop.entity.Route;
 import com.ss.utop.menu.BookTicket;
 //import com.ss.utop.menu.BookTicket2;
 import com.ss.utop.menu.CancelTrip;
 import com.ss.utop.menu.Main;
+import com.ss.utop.menu.Traveler1;
 
 public class TravelerService {
 	ConnectionUtil connUtil = new ConnectionUtil();
@@ -179,11 +181,12 @@ public class TravelerService {
 		Connection conn = null;
 		
 		List<Route> userFlights = new ArrayList<>();
+		List<FlightBookings> bookings = new ArrayList<>();
 		
 		int count = 1;
 		try {
 			conn = connUtil.getConnection();
-			String sql = "select a.* from route a, flight b, flight_bookings c, booking d, passenger e, airport f where a.id = b.route_id and b.id = c.flight_id and "
+			String sql = "select a.*, c.* from route a, flight b, flight_bookings c, booking d, passenger e, airport f where a.id = b.route_id and b.id = c.flight_id and "
 					+ "c.booking_id = d.id and e.booking_id = d.id and e.id = '"+cardNum+"' group by id";
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -197,7 +200,12 @@ public class TravelerService {
 				r.setId(rs.getInt("id"));
 				r.getOrgAirport().setAirportCode(rs.getString("origin_id"));
 				r.getDesAirport().setAirportCode(rs.getString("destination_id"));
-
+				
+				FlightBookings fb = new FlightBookings();
+				fb.getBookingId().setId(rs.getInt("booking_id"));
+				fb.getFlightBookingId().setFlightId(rs.getInt("flight_id"));
+				bookings.add(fb);
+				
 				System.out.println(count+") "+ rs.getString("origin_id") + " to " + rs.getString("destination_id"));
 				userFlights.add(r);
 				count++;
@@ -211,6 +219,34 @@ public class TravelerService {
 		System.out.println(count+") Quit\n");
 		
 		CancelTrip ct = new CancelTrip();
-		ct.run2(userFlights, cardNum);
+		ct.run2(userFlights, bookings, cardNum);
+	}
+	
+	public void deleteTrip(int cardNum, FlightBookings booking) throws SQLException
+	{
+		Connection conn = null;
+		try {
+			conn = connUtil.getConnection();
+			FlightBookings temp = new FlightBookings();
+			temp.setBookingId(booking.getBookingId());
+			temp.setFlightBookingId(booking.getFlightBookingId());
+			FlightBookingsDAO fbdao = new FlightBookingsDAO(conn);
+			
+			fbdao.deleteFlightBookings(temp);
+			
+			System.out.println("Deleted");
+			conn.commit();					//if it is all good, commit the changes
+		}catch (Exception e)
+		{
+			e.printStackTrace();	
+			conn.rollback();				//if it fails, roll back
+		}
+		finally
+		{
+			conn.close();					//close connection
+			System.out.println("\n");
+			Traveler1 t1 = new Traveler1();
+			t1.run();
+		}
 	}
 }

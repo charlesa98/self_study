@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
+import com.ss.utop.entity.FlightBookings;
 import com.ss.utop.entity.Route;
 import com.ss.utop.service.TravelerService;
 
@@ -25,7 +26,7 @@ public class CancelTrip {
 			e.printStackTrace();	
 		}
 	}	
-	public void run2(List<Route> routeList, int cardNum) throws SQLException
+	public void run2(List<Route> routeList, List<FlightBookings> bookingList, int cardNum) throws SQLException
 	{
 		header();
 		Scanner input = new Scanner(System.in);
@@ -46,16 +47,24 @@ public class CancelTrip {
 				//create an array to convert the list so we can get the index (choice+1) of the branch we want
 				Route[] routeArray = new Route[routeList.size()];
 				routeArray = routeList.toArray(routeArray);
+				
+				FlightBookings[] bookingArray = new FlightBookings[bookingList.size()];
+				bookingArray = bookingList.toArray(bookingArray);
 
 				Route routes = new Route();
 				
 				routes.setId(routeArray[choice].getId());
 				routes.setOrgAirport(routeArray[choice].getOrgAirport());
 				routes.setDesAirport(routeArray[choice].getDesAirport());
+				
+				FlightBookings bookings = new FlightBookings();
+				
+				bookings.setBookingId(bookingArray[choice].getBookingId());
+				bookings.setFlightBookingId(bookingArray[choice].getFlightBookingId());
 			
 				quit = true;
 				
-				System.out.println("\nYou have selected flight "+routes.getOrgAirport().getAirportCode() + " to " + routes.getDesAirport().getAirportCode());
+				System.out.println("\nYou have selected flight "+routes.getOrgAirport().getAirportCode() + " to " + routes.getDesAirport().getAirportCode()+" with booking id of "+bookings.getBookingId().getId());
 				System.out.println("Are you sure you wish to cancel? y/n");
 				
 				Scanner input2 = new Scanner(System.in);
@@ -64,6 +73,7 @@ public class CancelTrip {
 				if(cont.equalsIgnoreCase("y") || cont.equalsIgnoreCase("yes"))			//Confirmation from user to delete their flight
 				{
 					System.out.println("\ndeleting");
+					ts.deleteTrip(cardNum, bookings);
 				}
 				else
 				{

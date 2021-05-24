@@ -51,10 +51,10 @@ public class UserTests {
 		conn = connUtil.getConnection();
 		UserDAO udao = new UserDAO(conn);
 		UserRoleDAO urdao = new UserRoleDAO(conn);
-		ur.setId(5);
+		ur.setId(21);
 		ur.setName("TESTING User ADD");
 		
-		u.setUserId(3769453);
+		u.setUserId(34);
 		u.setUserRole(ur);
 		u.setfName("First");
 		u.setlName("Last");
@@ -86,10 +86,10 @@ public class UserTests {
 		conn = connUtil.getConnection();
 		UserDAO udao = new UserDAO(conn);
 		UserRoleDAO urdao = new UserRoleDAO(conn);
-		ur.setId(5);
+		ur.setId(21);
 		ur.setName("TESTING user UPDATE");
 		
-		u.setUserId(3769453);
+		u.setUserId(34);
 		u.setUserRole(ur);
 		u.setfName("First");
 		u.setlName("Last");
@@ -130,10 +130,10 @@ public class UserTests {
 		conn = connUtil.getConnection();
 		UserDAO udao = new UserDAO(conn);
 		UserRoleDAO urdao = new UserRoleDAO(conn);
-		ur.setId(5);
+		ur.setId(21);
 		ur.setName("TESTING user DELETE");
 		
-		u.setUserId(3769453);
+		u.setUserId(34);
 		u.setUserRole(ur);
 		u.setfName("First");
 		u.setlName("Last");

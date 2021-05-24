@@ -28,7 +28,7 @@ public class FlightBookingsDAO extends BaseDAO<FlightBookings>{
 	
 	public void deleteFlightBookings(FlightBookings fb) throws ClassNotFoundException, SQLException
 	{
-		save("DELETE FROM flight_bookings where flight_id = ?", new Object[] {fb.getFlightBookingId()});
+		save("DELETE FROM flight_bookings where flight_id = ? and booking_id = ?", new Object[] {fb.getFlightBookingId().getFlightId(), fb.getBookingId().getId()});
 	}
 	
 	public List<FlightBookings> getAllFlightBookingss() throws ClassNotFoundException, SQLException
