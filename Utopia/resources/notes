@@ -1,0 +1,14 @@
+Adding a new Flight
+ route IAD -> DCA
+ Passenger flight 500 cap
+ depart time, arrive time, seats
+ 
+ 
+ DB transaction - SINGLE CONNECTION 
+ AddNewFlight(){
+	 airportDAO.save(); - rollback if exception
+	 airplaneTypeDAO.save(); -rollback if exception 
+	 EXCEPTION 
+	 airplaneDAO.save();
+	 flightDAO.save();
+}
