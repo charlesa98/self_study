@@ -7,10 +7,12 @@ import java.util.List;
 import com.ss.utop.dao.AirplaneDAO;
 import com.ss.utop.dao.AirplaneTypeDAO;
 import com.ss.utop.dao.AirportDAO;
+import com.ss.utop.dao.FlightBookingsDAO;
 import com.ss.utop.dao.FlightDAO;
 import com.ss.utop.dao.RouteDAO;
 import com.ss.utop.dao.UserDAO;
 import com.ss.utop.entity.Flight;
+import com.ss.utop.entity.FlightBookings;
 import com.ss.utop.entity.Route;
 import com.ss.utop.entity.User;
 import com.ss.utop.menu.Main;
@@ -931,6 +933,114 @@ public class AdminService {
 			
 			List<User> aList = udao.getAllUsers();
 			for(User a : aList)
+			{
+				System.out.println(a.toString());
+			}
+		}catch (Exception e)
+		{
+			e.printStackTrace();	
+			conn.rollback();				//if it fails, roll back
+		}
+		finally
+		{
+			conn.close();					//close connection
+			Main.run();
+		}
+	}
+//----------------TICKETS-----------------------------------------
+	public void addNewTicket(FlightBookings fb) throws SQLException			//create different methods to create stuff
+	{
+		Connection conn = null;
+		try {
+			conn = connUtil.getConnection();
+			FlightBookings temp = new FlightBookings();
+			
+			temp.setBookingId(fb.getBookingId());
+			temp.setFlightBookingId(fb.getFlightBookingId());
+			
+			FlightBookingsDAO fbdao = new FlightBookingsDAO(conn);
+			
+			fbdao.addFlightBookings(fb);
+			
+			System.out.println("Added");
+			conn.commit();					//if it is all good, commit the changes
+		}catch (Exception e)
+		{
+			System.out.println("Something went wrong. One of the IDs might not be correct");
+			conn.rollback();				//if it fails, roll back
+		}
+		finally
+		{
+			conn.close();					//close connection
+			Main.run();						//calls the main menu run function to continue to run
+		}
+	}
+	
+	public void updateTicket(FlightBookings fb) throws SQLException			//create different methods to create stuff
+	{
+		Connection conn = null;
+		try {
+			conn = connUtil.getConnection();
+			FlightBookings temp = new FlightBookings();
+			
+			temp.setBookingId(fb.getBookingId());
+			temp.setFlightBookingId(fb.getFlightBookingId());
+			
+			FlightBookingsDAO fbdao = new FlightBookingsDAO(conn);
+			
+			fbdao.updateFlightBookings(fb);
+			
+			System.out.println("Updated");
+			conn.commit();					//if it is all good, commit the changes
+		}catch (Exception e)
+		{
+			System.out.println("Something went wrong. One of the IDs might not be correct");
+			conn.rollback();				//if it fails, roll back
+		}
+		finally
+		{
+			conn.close();					//close connection
+			Main.run();						//calls the main menu run function to continue to run
+		}
+	}
+	
+	public void deleteTicket(FlightBookings fb) throws SQLException			//create different methods to create stuff
+	{
+		Connection conn = null;
+		try {
+			conn = connUtil.getConnection();
+			FlightBookings temp = new FlightBookings();
+			
+			temp.setBookingId(fb.getBookingId());
+			temp.setFlightBookingId(fb.getFlightBookingId());
+			
+			FlightBookingsDAO fbdao = new FlightBookingsDAO(conn);
+			
+			fbdao.deleteFlightBookings(fb);
+			
+			System.out.println("deleted");
+			conn.commit();					//if it is all good, commit the changes
+		}catch (Exception e)
+		{
+			System.out.println("Something went wrong. One of the IDs might not be correct");
+			conn.rollback();				//if it fails, roll back
+		}
+		finally
+		{
+			conn.close();					//close connection
+			Main.run();						//calls the main menu run function to continue to run
+		}
+	}
+	
+	public void readAllTickets()throws SQLException
+	{
+		Connection conn = null;
+		try {		
+			conn = connUtil.getConnection();
+			FlightBookingsDAO fbdao = new FlightBookingsDAO(conn);
+			
+			List<FlightBookings> aList = fbdao.getAllFlightBookingss();
+			for(FlightBookings a : aList)
 			{
 				System.out.println(a.toString());
 			}

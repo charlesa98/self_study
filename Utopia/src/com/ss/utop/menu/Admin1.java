@@ -11,7 +11,7 @@ public class Admin1{
 	private AdminFlights adF = new AdminFlights();
 	private AdminAirport aap = new AdminAirport();
 	//private AdminSeats aseats = new AdminSeats();
-	//private AdminTickets tickets = new AdminTickets();
+	private AdminTickets tickets = new AdminTickets();
 	private AdminTravelers travelers = new AdminTravelers();
 	private AdminEmployees ame = new AdminEmployees();
 
@@ -71,7 +71,7 @@ public class Admin1{
 			case 3:
 				//open traveler menu 1
 				System.out.println("ADD/UPDATE/DELETE/READ Tickets and Passengers");
-
+				tickets.performNext();
 				break;
 				
 			case 4:
